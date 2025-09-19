@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es2020",                     /* Modern JS features */
+    "module": "ESNext",                     /* Use modern ES Modules */
+    "moduleResolution": "node",             /* Resolve like Node.js */
+    "outDir": "./public",                   /* Output folder */
+    "rootDir": "./src",                     /* Source folder */
+    "esModuleInterop": true, 
+    "resolveJsonModule": true,               /* Allow default imports */
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "moduleDetection": "force",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+  },
+  "include": ["src/**/*"],                       /* Compile only src folder */
+  "exclude": ["node_modules","public"] 
+}
