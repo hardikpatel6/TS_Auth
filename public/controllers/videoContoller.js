@@ -1,17 +1,14 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import dotenv from "dotenv";
-dotenv.config();
-import cloudinary from "../config/cloudinary";
-import Video from "../models/videoModel";
-const uploadVideo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.uploadVideo = void 0;
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const cloudinary_1 = __importDefault(require("../config/cloudinary"));
+const videoModel_1 = __importDefault(require("../models/videoModel"));
+const uploadVideo = async (req, res) => {
     res.send("Request received");
     try {
         const { title, description, category, tags } = req.body;
@@ -22,7 +19,7 @@ const uploadVideo = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         // Upload video to Cloudinary
         const videoFile = Array.isArray(req.files.video)
             ? req.files.video[0].tempFilePath : req.files.video.tempFilePath;
-        const videoUpload = yield cloudinary.uploader.upload(videoFile, {
+        const videoUpload = await cloudinary_1.default.uploader.upload(videoFile, {
             resource_type: "video",
             folder: "TS_AUTHENTICATION/videos"
         });
@@ -30,12 +27,12 @@ const uploadVideo = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const thumbnailFile = Array.isArray(req.files.thumbnail)
             ? req.files.thumbnail[0].tempFilePath : req.files.thumbnail.tempFilePath;
         if (req.files.thumbnail) {
-            const thumbnailUpload = yield cloudinary.uploader.upload(thumbnailFile, {
+            const thumbnailUpload = await cloudinary_1.default.uploader.upload(thumbnailFile, {
                 folder: "TS_AUTHENTICATION/thumbnails"
             });
             thumbnailUrl = thumbnailUpload.secure_url;
         }
-        const newVideo = new Video({
+        const newVideo = new videoModel_1.default({
             title,
             description,
             url: videoUpload.secure_url,
@@ -44,12 +41,12 @@ const uploadVideo = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             tags: tags ? (Array.isArray(tags) ? tags : [tags]) : [],
             uploadedBy: req.user._id, // Assuming auth middleware adds user to req
         });
-        const savedVideo = yield newVideo.save();
+        const savedVideo = await newVideo.save();
         res.status(200).json({ message: "Video Uploaded Successfully", video: newVideo });
     }
     catch (err) {
         console.log(err);
         res.json("Error in DB");
     }
-});
-export { uploadVideo };
+};
+exports.uploadVideo = uploadVideo;

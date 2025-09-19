@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
-import main from "./config/db.ts";
-import userRouter from "./routes/userRoutes.ts";
-import videoRouter from "./routes/videoRoutes.ts";
+import main from "./config/db";
+import userRouter from "./routes/userRoutes";
+import videoRouter from "./routes/videoRoutes";
 
 const app = express();
 dotenv.config();

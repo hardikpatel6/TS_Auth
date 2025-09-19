@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "ts_authentication",
   "version": "1.0.0",
   "main": "index.js",

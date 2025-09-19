@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
 import dotenv from "dotenv";
 dotenv.config();
-import cloudinary from "../config/cloudinary.ts";
-import Video from "../models/videoModel.ts";
-import type { VideoUploadRequest } from "../types/customRequest.ts";
+import cloudinary from "../config/cloudinary";
+import Video from "../models/videoModel";
+import type { VideoUploadRequest } from "../types/customRequest";
 
 const uploadVideo = async (req: VideoUploadRequest, res: Response): Promise<void> => {
     res.send("Request received");

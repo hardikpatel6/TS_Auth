@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import type { IUser } from "../models/userModel.ts";
-import User from "../models/userModel.ts";
+import type { IUser } from "../models/userModel";
+import User from "../models/userModel";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
