@@ -1,4 +1,4 @@
-import { UploadedFile } from "express-fileupload";
+import type { UploadedFile } from "express-fileupload";
 
 export interface VideoUploadRequestBody {
     title: string;
@@ -7,7 +7,7 @@ export interface VideoUploadRequestBody {
     tags?: string[];
 }
 
-export interface VideoUploadRequestFiles{
+export interface VideoUploadRequestFiles {
     video: UploadedFile;
     thumbnail: UploadedFile;
 }

@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { v2 as cloudinary, ConfigOptions } from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
+import type { ConfigOptions } from "cloudinary";
 
 // Define config type
 const cloudinaryConfig: ConfigOptions = {
