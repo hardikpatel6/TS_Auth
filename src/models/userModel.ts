@@ -1,24 +1,24 @@
-import { Schema,model } from "mongoose";
+import { Schema, model } from "mongoose";
 
-export interface IUser{
-    name:String,
-    email:String,
-    password:String,
-    role?: "user" | "admin"
+export interface IUser {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
 }
 
 const userSchema = new Schema<IUser>({
-    name : {
-        type : String,
-        required:true
+    name: {
+        type: String,
+        required: true
     },
-    email : {
-        type : String,
-        required : true
+    email: {
+        type: String,
+        required: true
     },
-    password : {
-        type : String,
-        required : true
+    password: {
+        type: String,
+        required: true
     },
     role: {
         type: String,
@@ -27,6 +27,6 @@ const userSchema = new Schema<IUser>({
     }
 });
 
-const User = model<IUser> ('User', userSchema);
+const User = model<IUser>('User', userSchema);
 
 export default User;

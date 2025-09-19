@@ -1,29 +1,29 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import dotenv from "dotenv";
 dotenv.config();
-import cloudinary from "../config/cloudinary.js";
-import Video,{IVideo} from "../models/videoModel.js";
-import { VideoUploadRequest } from "../types/customRequest.js";
+import cloudinary from "../config/cloudinary.ts";
+import Video from "../models/videoModel.ts";
+import type { VideoUploadRequest } from "../types/customRequest.ts";
 
 const uploadVideo = async (req: VideoUploadRequest, res: Response): Promise<void> => {
     res.send("Request received");
-    try{
-        const {title,description,category,tags} = req.body;
+    try {
+        const { title, description, category, tags } = req.body;
         if (!req.files || !req.files.video) {
             res.status(400).json({ message: "No file or Video uploaded" });
             return;
         }
         // Upload video to Cloudinary
-        const videoFile  = Array.isArray(req.files.video)
-         ? req.files.video[0].tempFilePath : req.files.video.tempFilePath;
-        const videoUpload = await cloudinary.uploader.upload(videoFile,{
-            resource_type: "video" ,
+        const videoFile = Array.isArray(req.files.video)
+            ? req.files.video[0].tempFilePath : req.files.video.tempFilePath;
+        const videoUpload = await cloudinary.uploader.upload(videoFile, {
+            resource_type: "video",
             folder: "TS_AUTHENTICATION/videos"
         });
 
         let thumbnailUrl: string | undefined;
         const thumbnailFile = Array.isArray(req.files.thumbnail)
-         ? req.files.thumbnail[0].tempFilePath : req.files.thumbnail.tempFilePath;
+            ? req.files.thumbnail[0].tempFilePath : req.files.thumbnail.tempFilePath;
         if (req.files.thumbnail) {
             const thumbnailUpload = await cloudinary.uploader.upload(thumbnailFile, {
                 folder: "TS_AUTHENTICATION/thumbnails"
@@ -43,11 +43,11 @@ const uploadVideo = async (req: VideoUploadRequest, res: Response): Promise<void
         const savedVideo = await newVideo.save();
 
 
-        res.status(200).json({message:"Video Uploaded Successfully", video: newVideo});
+        res.status(200).json({ message: "Video Uploaded Successfully", video: newVideo });
     } catch (err: unknown) {
         console.log(err);
         res.json("Error in DB");
     }
 }
 
-export {uploadVideo};
+export { uploadVideo };

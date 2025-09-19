@@ -1,11 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 dotenv.config();
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import type { JwtPayload } from "jsonwebtoken";
 
-function auth(req:Request, res:Response, next:NextFunction) {
-    const authHeader : string | undefined = req.headers.authorization;
-    const token : undefined | null | string = authHeader?.split(" ")[1] || req.cookies.token;
+function auth(req: Request, res: Response, next: NextFunction) {
+    const authHeader: string | undefined = req.headers.authorization;
+    const token: undefined | null | string = authHeader?.split(" ")[1] || req.cookies.token;
     if (!token) {
         return res.status(401).send("User Unauthorized: No Token");
     }
@@ -13,7 +14,7 @@ function auth(req:Request, res:Response, next:NextFunction) {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET || "Hardik") as JwtPayload & { role?: string };
 
-        if(!decoded.role){
+        if (!decoded.role) {
             return res.status(401).send("User Unauthorized: No Role Found");
         }
         (req as any).user = decoded;
@@ -25,7 +26,7 @@ function auth(req:Request, res:Response, next:NextFunction) {
     }
 }
 
-function isAdmin(req:Request, res:Response, next:NextFunction) {
+function isAdmin(req: Request, res: Response, next: NextFunction) {
     const user = (req as any).user;
     if (user && user.role === "admin") {
         next();
@@ -33,4 +34,4 @@ function isAdmin(req:Request, res:Response, next:NextFunction) {
         res.status(403).send("Forbidden: Admins Only");
     }
 }
-export {auth,isAdmin};
+export { auth, isAdmin };
