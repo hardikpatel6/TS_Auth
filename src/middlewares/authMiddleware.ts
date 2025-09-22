@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
 
 function auth(req: Request, res: Response, next: NextFunction) {
+    console.log("Auth middleware hit");
     const authHeader: string | undefined = req.headers.authorization;
     const token: undefined | null | string = authHeader?.split(" ")[1] || req.cookies.token;
     if (!token) {

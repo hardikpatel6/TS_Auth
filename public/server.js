@@ -16,5 +16,5 @@ app.use("/api/v1/users", userRoutes_1.default);
 app.use("/api/v1/videos", videoRoutes_1.default);
 (0, db_1.default)();
 app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
+    console.log(`Server is listening on ${port}`);
 });

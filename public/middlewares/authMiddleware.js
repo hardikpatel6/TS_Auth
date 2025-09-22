@@ -9,6 +9,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 function auth(req, res, next) {
+    console.log("Auth middleware hit");
     const authHeader = req.headers.authorization;
     const token = authHeader?.split(" ")[1] || req.cookies.token;
     if (!token) {

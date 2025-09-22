@@ -15,5 +15,5 @@ app.use("/api/v1/videos", videoRouter);
 main();
 
 app.listen(port, (): void => {
-    console.log(`Server is listening on port ${port}`)
+    console.log(`Server is listening on ${port}`)
 });
