@@ -7,8 +7,7 @@ exports.uploadVideo = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const uploadVideo = async (req, res) => {
-    console.log("Upload video controller hit");
-    // res.send("Request received");
+    res.send("Request received");
     // try {
     //     const { title, description, category, tags } = req.body;
     //     if (!req.files || !req.files.video) {

@@ -50,7 +50,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
         } else {
             console.log("user role:", user.role);
             const token: string = jwt.sign(
-                { email: user.email, role: user.role },
+                { id: user._id,email: user.email, role: user.role },
                 JWT_SECRET,
                 { expiresIn: "1h" }
             );
