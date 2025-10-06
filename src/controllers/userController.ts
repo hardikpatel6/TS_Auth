@@ -6,7 +6,9 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET || "Ketali";
-
+interface AuthenticatedRequest extends Request {
+  user?: { _id: string };
+}
 const signUpUser = async (req: Request, res: Response): Promise<void> => {
     let { name, email, password, role } = req.body;
     if (!name || !email || !password) {
@@ -90,5 +92,4 @@ const getAllAdmins = async (req: Request, res: Response): Promise<void> => {
         res.json("Error in DB");
     }
 }
-
-export { signUpUser, loginUser, getAllUsersAndAdmin, getAllUsers, getAllAdmins };
+export { signUpUser, loginUser, getAllUsersAndAdmin, getAllUsers, getAllAdmins};

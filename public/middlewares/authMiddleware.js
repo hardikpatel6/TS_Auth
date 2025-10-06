@@ -8,8 +8,8 @@ exports.isAdmin = isAdmin;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-function auth(req, res, next) {
-    console.log("Auth middleware hit");
+const userModel_1 = __importDefault(require("../models/userModel"));
+async function auth(req, res, next) {
     const authHeader = req.headers.authorization;
     const token = authHeader?.split(" ")[1] || req.cookies.token;
     if (!token) {
@@ -17,10 +17,15 @@ function auth(req, res, next) {
     }
     try {
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || "Hardik");
-        if (!decoded.role) {
+        console.log("Decoded Token:", decoded);
+        if (!decoded.id || !decoded.role) {
             return res.status(401).send("User Unauthorized: No Role Found");
         }
-        req.user = decoded;
+        req.user = await userModel_1.default.findById(decoded.id).select("-password");
+        if (!req.user) {
+            return res.status(401).send("User Unauthorized: User Not Found");
+        }
+        console.log("Req.user:", req.user);
         next();
     }
     catch (err) {
@@ -29,11 +34,8 @@ function auth(req, res, next) {
     }
 }
 function isAdmin(req, res, next) {
-    const user = req.user;
-    if (user && user.role === "admin") {
-        next();
+    if (req.user && req.user.role === "admin") {
+        return next();
     }
-    else {
-        res.status(403).send("Forbidden: Admins Only");
-    }
+    return res.status(403).send("Forbidden: Admins Only");
 }

@@ -1,7 +1,6 @@
 import express from "express";
 import {signUpUser,loginUser,getAllUsersAndAdmin,getAllUsers,getAllAdmins} from "../controllers/userController";
 import {auth,isAdmin} from "../middlewares/authMiddleware";
-
 const router = express.Router();
 
 router.post("/signup",signUpUser);

@@ -4,7 +4,6 @@ dotenv.config();
 import jwt from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
 import User from "../models/userModel";
-
 export interface AuthRequest extends Request {
     user?: any;
 }

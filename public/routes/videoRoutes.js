@@ -4,8 +4,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const videoContoller_1 = require("../controllers/videoContoller");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
 const router = express_1.default.Router();
-router.post("/upload", (req, res) => {
-    console.log("Upload route hit");
-});
+router.post("/upload-video", authMiddleware_1.auth, videoContoller_1.uploadVideoFile);
+router.get("/", authMiddleware_1.auth, videoContoller_1.showAllVideos);
+router.get("/search", authMiddleware_1.auth, videoContoller_1.searchVideos);
+router.get("/:id", authMiddleware_1.auth, videoContoller_1.getVideoById);
+router.put("/:id", authMiddleware_1.auth, videoContoller_1.editVideo);
+router.post("/like/:id", authMiddleware_1.auth, videoContoller_1.likeVideo);
+router.post("/dislike/:id", authMiddleware_1.auth, videoContoller_1.dislikeVideo);
+router.delete("/:id", authMiddleware_1.auth, videoContoller_1.deleteVideo);
+router.post("/subscribe/:id", authMiddleware_1.auth, videoContoller_1.subscribeVideo);
+router.post("/unsubscribe/:id", authMiddleware_1.auth, videoContoller_1.unsubscribeVideo);
 exports.default = router;

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import main from "./config/db";
 import userRouter from "./routes/userRoutes";
 import videoRouter from "./routes/videoRoutes";
+import commentRouter from "./routes/commentRoutes";
 import fileUpload,{UploadedFile} from "express-fileupload";
 import cookieParser from "cookie-parser";
 const app = express();
@@ -17,6 +18,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/videos", videoRouter);
+app.use("/api/v1/comments",commentRouter);
 
 main();
 

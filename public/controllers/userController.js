@@ -56,7 +56,7 @@ const loginUser = async (req, res) => {
         }
         else {
             console.log("user role:", user.role);
-            const token = jsonwebtoken_1.default.sign({ email: user.email, role: user.role }, JWT_SECRET, { expiresIn: "1h" });
+            const token = jsonwebtoken_1.default.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: "1h" });
             console.log("token:", token);
             res.cookie("token", token, { httpOnly: true, sameSite: "strict" });
             res.status(200).json({ message: "Login successful", token, role: user.role });
