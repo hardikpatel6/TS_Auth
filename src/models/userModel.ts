@@ -1,12 +1,13 @@
-import { Schema, model } from "mongoose";
+import { Schema, model,HydratedDocument } from "mongoose";
 
 export interface IUser {
-    _id: string;
     name: string;
     email: string;
     password: string;
     role: string;
+    refreshToken?:string;
 }
+export type IUserDocument = HydratedDocument<IUser>;
 
 const userSchema = new Schema<IUser>({
     name: {
@@ -25,8 +26,11 @@ const userSchema = new Schema<IUser>({
         type: String,
         enum: ["user", "admin"],
         default: "user"
+    },
+    refreshToken:{
+        type:String
     }
-});
+},{ timestamps: true });
 
 const User = model<IUser>('User', userSchema);
 

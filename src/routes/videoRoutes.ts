@@ -1,7 +1,6 @@
 import express from "express";
-import {Request,Response} from "express";
 import {uploadVideoFile,showAllVideos,searchVideos,getVideoById,editVideo,likeVideo,dislikeVideo,deleteVideo,subscribeVideo,unsubscribeVideo} from "../controllers/videoContoller";
-import {auth,isAdmin} from "../middlewares/authMiddleware";
+import {auth} from "../middlewares/authMiddleware";
 
 const router = express.Router();
 

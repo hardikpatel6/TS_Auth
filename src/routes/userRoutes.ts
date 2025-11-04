@@ -1,11 +1,16 @@
 import express from "express";
-import {signUpUser,loginUser,getAllUsersAndAdmin,getAllUsers,getAllAdmins} from "../controllers/userController";
+import {registerUser,loginUser,logoutUser,getAllUsersAndAdmin,getAllUsers,getOneUser,updateUser,deleteUser,getAllAdmins,refreshAccessToken} from "../controllers/userController";
 import {auth,isAdmin} from "../middlewares/authMiddleware";
 const router = express.Router();
 
-router.post("/signup",signUpUser);
+router.post("/register",registerUser);
 router.post("/login",loginUser);
+router.post("/refreshToken",refreshAccessToken);
+router.post("/logout",auth,logoutUser);
 router.get("/getAllData",auth,isAdmin,getAllUsersAndAdmin);
 router.get("/getAllUsers",auth,isAdmin,getAllUsers);
+router.get("/:id",auth,getOneUser);
+router.put("/:id",auth,updateUser);
+router.delete("/:id",auth,deleteUser);
 router.get("/getAllAdmins",auth,isAdmin,getAllAdmins);
 export default router;

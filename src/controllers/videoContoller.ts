@@ -1,7 +1,6 @@
 import type { Request, Response } from "express";
 import dotenv from "dotenv";
 dotenv.config();
-import { Types } from "mongoose";
 import { UploadedFile } from "express-fileupload";
 import cloudinary from "../config/cloudinary";
 import Video from "../models/videoModel";
@@ -35,7 +34,7 @@ export const uploadVideoFile = async (req: Request, res: Response): Promise<Resp
     const videoReq = req as VideoUploadRequest;
 
     try {
-        const { title, description, category, tags } = videoReq.body;
+        const { title, description, category, tags} = videoReq.body;
 
         if (!videoReq.files || !videoReq.files.video) {
             return res.status(400).json({ message: "No video uploaded" });
@@ -62,7 +61,7 @@ export const uploadVideoFile = async (req: Request, res: Response): Promise<Resp
                 folder: "TS_AUTHENTICATION/thumbnails",
             });
 
-            console.log("Thumbnail Upload Result:", thumbnailUpload);
+            // console.log("Thumbnail Upload Result:", thumbnailUpload);
         }
 
         // 📌 Save video info in DB
@@ -174,8 +173,8 @@ export const getVideoById = async (req: Request, res: Response) => {
 export const editVideo = async (req: Request, res: Response) => {
     try {
         const videoId = req.params.id;
-        console.log(videoId);
-        console.log(req.body);
+        // console.log(videoId);
+        // console.log(req.body);
         const { title, description, tags, category } = req.body;
         const updatedVideo = await Video.findByIdAndUpdate(
             videoId,
@@ -187,7 +186,7 @@ export const editVideo = async (req: Request, res: Response) => {
             },
             { new: true } // return updated document
         ).populate("uploadedBy", "username email");
-        console.log(updatedVideo);
+        // console.log(updatedVideo);
         if (!updatedVideo) {
             return res.status(404).json({ message: "Video not found" });
         }
@@ -270,13 +269,13 @@ export const deleteVideo = async (req: AuthenticatedRequest, res: Response) => {
         const userId = req.user?._id;
         const userRole = req.user?.role;
 
-        console.log("Video to be deleted:", video);
-        console.log("User Role:", userRole);
+        // console.log("Video to be deleted:", video);
+        // console.log("User Role:", userRole);
         if (!video) {
             return res.status(404).json({ message: "Video not found" });
         }
-        console.log("Authenticated User ID:", userId?.toString());
-        console.log("Video Uploaded By ID:", video.uploadedBy.toString());
+        // console.log("Authenticated User ID:", userId?.toString());
+        // console.log("Video Uploaded By ID:", video.uploadedBy.toString());
         if (video.uploadedBy.toString() !== userId?.toString() && userRole !== "admin") {
             return res.status(403).json({ message: "You are not authorized to delete this video" });
         }
@@ -364,5 +363,3 @@ export const unsubscribeVideo = async (req: AuthenticatedRequest, res: Response)
     res.status(500).json({ message: "Server error" });
   }
 };
-
-// export default { uploadVideoFile , showAllVideos };

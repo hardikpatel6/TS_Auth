@@ -12,6 +12,7 @@ export interface IVideo {
   videoPublicId: string;
   thumbnailPublicId: string; 
   uploadedBy: Types.ObjectId; // user _id
+  channelId?: Types.ObjectId; // channel _id
   views?: number;
   like?: number;
   dislike?: number;
@@ -36,6 +37,7 @@ const videoSchema = new Schema<IVideo>(
     thumbnailPublicId: { type: String },
     tags: { type: [String] },
     uploadedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    channelId: { type: Schema.Types.ObjectId, ref: "Channel" },
     likedBy: [{ type: Schema.Types.ObjectId, ref: "User" }],
     dislikedBy: [{ type: Schema.Types.ObjectId, ref: "User" }],
     viewedBy: [{ type: Schema.Types.ObjectId, ref: "User" }],

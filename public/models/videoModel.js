@@ -11,6 +11,7 @@ const videoSchema = new mongoose_1.Schema({
     thumbnailPublicId: { type: String },
     tags: { type: [String] },
     uploadedBy: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
+    channelId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Channel" },
     likedBy: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "User" }],
     dislikedBy: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "User" }],
     viewedBy: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "User" }],

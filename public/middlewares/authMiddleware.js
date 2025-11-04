@@ -9,22 +9,27 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userModel_1 = __importDefault(require("../models/userModel"));
+const tokenBlacklist_1 = require("./../utils/tokenBlacklist");
 async function auth(req, res, next) {
     const authHeader = req.headers.authorization;
-    const token = authHeader?.split(" ")[1] || req.cookies.token;
+    const token = authHeader?.split(" ")[1] || req.cookies.accessToken;
     if (!token) {
         return res.status(401).send("User Unauthorized: No Token");
     }
+    if ((0, tokenBlacklist_1.isBlacklisted)(token)) {
+        return res.status(401).send("User Unauthorized: Token is Blacklisted");
+    }
     try {
-        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || "Hardik");
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET || "Hardik");
         console.log("Decoded Token:", decoded);
-        if (!decoded.id || !decoded.role) {
+        if (!decoded.sub || !decoded.role) {
             return res.status(401).send("User Unauthorized: No Role Found");
         }
-        req.user = await userModel_1.default.findById(decoded.id).select("-password");
-        if (!req.user) {
+        const user = await userModel_1.default.findById(decoded.sub).select("-password");
+        if (!user) {
             return res.status(401).send("User Unauthorized: User Not Found");
         }
+        req.user = user;
         console.log("Req.user:", req.user);
         next();
     }
