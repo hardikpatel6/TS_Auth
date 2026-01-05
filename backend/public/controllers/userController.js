@@ -13,9 +13,6 @@ const tokenUtils_1 = require("../utils/tokenUtils");
 dotenv_1.default.config();
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "patel";
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "hardik";
-// interface AuthenticatedRequest extends Request {
-//     user?: { _id: string };
-// }
 const registerUser = async (req, res) => {
     let { name, email, password, role } = req.body;
     if (!name || !email || !password) {
@@ -100,11 +97,9 @@ const logoutUser = async (req, res) => {
             res.status(400).json({ message: "Refresh token missing" });
             return;
         }
-        console.log("Logout token:", token);
         let decoded;
         try {
             decoded = jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET);
-            console.log("decoded user data:", decoded);
         }
         catch (err) {
             console.error("Error during logout:", err);
@@ -118,7 +113,6 @@ const logoutUser = async (req, res) => {
         }
         if (token) {
             (0, tokenBlacklist_1.blacklistToken)(token);
-            console.log("Access token blacklisted:", token);
         }
         res.clearCookie("refreshToken", {
             httpOnly: true,
@@ -142,7 +136,6 @@ const refreshAccessToken = async (req, res) => {
         let decoded;
         try {
             decoded = (0, tokenUtils_1.decodedUser)(incomingRefreshToken);
-            console.log(decoded);
         }
         catch (err) {
             console.error("Error refreshing access token:", err);

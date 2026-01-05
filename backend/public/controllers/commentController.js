@@ -117,7 +117,7 @@ const likeComment = async (req, res) => {
         const comment = await commentModel_1.default.findById(id);
         if (!comment)
             return res.status(404).json({ message: "Comment not found" });
-        console.log("Liked By:", comment.likedBy);
+        // console.log("Liked By:",comment.likedBy);
         // Convert ObjectIds to strings for comparison
         const likedBy = comment.likedBy?.map(id => id.toString()) || [];
         const dislikedBy = comment.dislikedBy?.map(id => id.toString()) || [];

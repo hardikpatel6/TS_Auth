@@ -11,9 +11,16 @@ const videoRoutes_1 = __importDefault(require("./routes/videoRoutes"));
 const commentRoutes_1 = __importDefault(require("./routes/commentRoutes"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 const port = process.env.PORT || 4000;
+app.use((0, cors_1.default)({
+    origin: "http://localhost:5173", // frontend URL
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+}));
 app.use((0, express_fileupload_1.default)({
     useTempFiles: true, // store files temporarily
     tempFileDir: "/tmp/",

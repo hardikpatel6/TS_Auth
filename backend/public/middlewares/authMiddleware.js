@@ -21,7 +21,7 @@ async function auth(req, res, next) {
     }
     try {
         const decoded = jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET || "Hardik");
-        console.log("Decoded Token:", decoded);
+        // console.log("Decoded Token:", decoded);
         if (!decoded.sub || !decoded.role) {
             return res.status(401).send("User Unauthorized: No Role Found");
         }
@@ -30,7 +30,7 @@ async function auth(req, res, next) {
             return res.status(401).send("User Unauthorized: User Not Found");
         }
         req.user = user;
-        console.log("Req.user:", req.user);
+        // console.log("Req.user:" ,req.user);
         next();
     }
     catch (err) {

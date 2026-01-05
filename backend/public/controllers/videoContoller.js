@@ -33,7 +33,7 @@ const uploadVideoFile = async (req, res) => {
             thumbnailUpload = await cloudinary_1.default.uploader.upload(thumbnailFile, {
                 folder: "TS_AUTHENTICATION/thumbnails",
             });
-            console.log("Thumbnail Upload Result:", thumbnailUpload);
+            // console.log("Thumbnail Upload Result:", thumbnailUpload);
         }
         // 📌 Save video info in DB
         const newVideo = new videoModel_1.default({
@@ -139,8 +139,8 @@ exports.getVideoById = getVideoById;
 const editVideo = async (req, res) => {
     try {
         const videoId = req.params.id;
-        console.log(videoId);
-        console.log(req.body);
+        // console.log(videoId);
+        // console.log(req.body);
         const { title, description, tags, category } = req.body;
         const updatedVideo = await videoModel_1.default.findByIdAndUpdate(videoId, {
             ...(title && { title }),
@@ -149,7 +149,7 @@ const editVideo = async (req, res) => {
             ...(category && { category })
         }, { new: true } // return updated document
         ).populate("uploadedBy", "username email");
-        console.log(updatedVideo);
+        // console.log(updatedVideo);
         if (!updatedVideo) {
             return res.status(404).json({ message: "Video not found" });
         }
@@ -226,13 +226,13 @@ const deleteVideo = async (req, res) => {
         const video = await videoModel_1.default.findById(videoId);
         const userId = req.user?._id;
         const userRole = req.user?.role;
-        console.log("Video to be deleted:", video);
-        console.log("User Role:", userRole);
+        // console.log("Video to be deleted:", video);
+        // console.log("User Role:", userRole);
         if (!video) {
             return res.status(404).json({ message: "Video not found" });
         }
-        console.log("Authenticated User ID:", userId?.toString());
-        console.log("Video Uploaded By ID:", video.uploadedBy.toString());
+        // console.log("Authenticated User ID:", userId?.toString());
+        // console.log("Video Uploaded By ID:", video.uploadedBy.toString());
         if (video.uploadedBy.toString() !== userId?.toString() && userRole !== "admin") {
             return res.status(403).json({ message: "You are not authorized to delete this video" });
         }
@@ -313,4 +313,3 @@ const unsubscribeVideo = async (req, res) => {
     }
 };
 exports.unsubscribeVideo = unsubscribeVideo;
-// export default { uploadVideoFile , showAllVideos };

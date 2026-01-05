@@ -86,6 +86,28 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
+const profileUser = async (req : AuthRequest , res : Response ) : Promise <Response | void > => {
+    try{
+        if(!req.user){
+            return res.status(401).json({message : "Unauthorized"});
+        }
+
+        return res.status(200).json({
+            user : {
+                id : req.user._id,
+                name : req.user.name,
+                email:req.user.email,
+                role : req.user.role,
+                createdAt : req.user.createdAt,
+                updatedAt : req.user.updatedAt,
+            },
+        });
+    } catch ( error ){
+        console.error("Profile error :",error);
+        return res.status(500).json({ message : "Server Error"});
+    }
+};
+
 const logoutUser = async (req: Request, res: Response): Promise<void> => {
     try {
         const incomingRefreshToken: string | undefined = req.headers.authorization;
@@ -257,4 +279,4 @@ const getAllAdmins = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken, getAllUsersAndAdmin, getAllUsers, getOneUser, updateUser, deleteUser, getAllAdmins };
+export { registerUser, loginUser, profileUser , logoutUser, refreshAccessToken, getAllUsersAndAdmin, getAllUsers, getOneUser, updateUser, deleteUser, getAllAdmins };

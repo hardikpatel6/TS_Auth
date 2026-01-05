@@ -12,9 +12,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "hardik";
-console.log(ACCESS_TOKEN_SECRET);
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "patel";
-console.log(REFRESH_TOKEN_SECRET);
 const ACCESS_TOKEN_TTL = "3m"; // short lived
 const REFRESH_TOKEN_TTL = "7d"; // long lived
 function signAccessToken(payload) {
