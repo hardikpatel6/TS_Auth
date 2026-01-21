@@ -16,7 +16,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await loginApi(form);
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("accessToken", res.data.accessToken);
       setUser(res.data.user);
       navigate("/");
     } catch (err) {

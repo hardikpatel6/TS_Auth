@@ -11,6 +11,7 @@ router.post("/register", userController_1.registerUser);
 router.post("/login", userController_1.loginUser);
 router.post("/refreshToken", userController_1.refreshAccessToken);
 router.post("/logout", authMiddleware_1.auth, userController_1.logoutUser);
+router.get("/profile", authMiddleware_1.auth, userController_1.profileUser);
 router.get("/getAllData", authMiddleware_1.auth, authMiddleware_1.isAdmin, userController_1.getAllUsersAndAdmin);
 router.get("/getAllUsers", authMiddleware_1.auth, authMiddleware_1.isAdmin, userController_1.getAllUsers);
 router.get("/:id", authMiddleware_1.auth, userController_1.getOneUser);

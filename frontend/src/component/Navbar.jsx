@@ -9,7 +9,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await logoutApi();
-    localStorage.removeItem("token");
+    localStorage.removeItem("accessToken");
     setUser(null);
     navigate("/login");
   };

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllAdmins = exports.deleteUser = exports.updateUser = exports.getOneUser = exports.getAllUsers = exports.getAllUsersAndAdmin = exports.refreshAccessToken = exports.logoutUser = exports.loginUser = exports.registerUser = void 0;
+exports.getAllAdmins = exports.deleteUser = exports.updateUser = exports.getOneUser = exports.getAllUsers = exports.getAllUsersAndAdmin = exports.refreshAccessToken = exports.logoutUser = exports.profileUser = exports.loginUser = exports.registerUser = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -89,6 +89,29 @@ const loginUser = async (req, res) => {
     }
 };
 exports.loginUser = loginUser;
+const profileUser = async (req, res) => {
+    try {
+        console.log(req.user);
+        if (!req.user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+        return res.status(200).json({
+            user: {
+                id: req.user._id,
+                name: req.user.name,
+                email: req.user.email,
+                role: req.user.role,
+                createdAt: req.user.createdAt,
+                updatedAt: req.user.updatedAt,
+            },
+        });
+    }
+    catch (error) {
+        console.error("Profile error :", error);
+        return res.status(500).json({ message: "Server Error" });
+    }
+};
+exports.profileUser = profileUser;
 const logoutUser = async (req, res) => {
     try {
         const incomingRefreshToken = req.headers.authorization;
