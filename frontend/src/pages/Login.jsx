@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { loginApi } from "../api/authApi";
 import { useAuth } from "../auth/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , Link} from "react-router-dom";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
-  const { setUser } = useAuth();
+  const { setUser, setToken } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -18,6 +18,7 @@ const Login = () => {
       const res = await loginApi(form);
       localStorage.setItem("accessToken", res.data.accessToken);
       setUser(res.data.user);
+      setToken(res.data.accessToken);
       navigate("/");
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
@@ -30,6 +31,13 @@ const Login = () => {
       <input name="email" placeholder="Email" onChange={handleChange} />
       <input name="password" type="password" placeholder="Password" onChange={handleChange} />
       <button>Login</button>
+      {/* 🔹 Signup redirect */}
+      <p style={{ marginTop: "10px" }}>
+        Don’t have an account?{" "}
+        <Link to="/signup" style={{ color: "blue" }}>
+          Sign up
+        </Link>
+      </p>
     </form>
   );
 };

@@ -5,14 +5,18 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const initAuth = async () => {
-      if (!localStorage.getItem("accessToken")) {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
         setLoading(false);
         return;
       }
+      
+      setToken(accessToken);
       try {
         // Try getting profile with existing access token
         const profileRes = await getProfileApi();
@@ -24,6 +28,7 @@ export const AuthProvider = ({ children }) => {
 
           const newAccessToken = refreshRes.data.accessToken;
           localStorage.setItem("accessToken", newAccessToken);
+          setToken(newAccessToken);
 
           // Retry profile request
           const profileRes = await getProfileApi();
@@ -32,6 +37,7 @@ export const AuthProvider = ({ children }) => {
           // 4️⃣ Refresh token invalid → full logout
           localStorage.removeItem("accessToken");
           setUser(null);
+          setToken(null);
         }
       } finally {
         setLoading(false);
@@ -42,7 +48,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading }}>
+    <AuthContext.Provider value={{ user, setUser, token, setToken, loading }}>
       {children}
     </AuthContext.Provider>
   );
