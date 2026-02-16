@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const initAuth = async () => {
-      const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
         setLoading(false);
         return;

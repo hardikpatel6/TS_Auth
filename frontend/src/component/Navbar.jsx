@@ -1,6 +1,6 @@
 // src/components/Navbar.jsx
 import { logoutApi } from "../api/authApi";
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
