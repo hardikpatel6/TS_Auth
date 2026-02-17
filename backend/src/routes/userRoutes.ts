@@ -10,8 +10,9 @@ router.post("/logout",auth,logoutUser);
 router.get("/profile",auth,profileUser);
 router.get("/getAllData",auth,isAdmin,getAllUsersAndAdmin);
 router.get("/getAllUsers",auth,isAdmin,getAllUsers);
+router.get("/getAllAdmins",auth,isAdmin,getAllAdmins);
 router.get("/:id",auth,getOneUser);
 router.put("/:id",auth,updateUser);
 router.delete("/:id",auth,deleteUser);
-router.get("/getAllAdmins",auth,isAdmin,getAllAdmins);
+
 export default router;
