@@ -1,15 +1,15 @@
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const VideoCard = ({ video }) => {
 
-//   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
 
     <div
-    //   onClick={() =>
-    //     navigate(`/watch/${video._id}`)
-    //   }
+      onClick={() =>
+        navigate(`/videos/${video._id}`)
+      }
       style={{
         cursor: "pointer",
         width: "300px"
