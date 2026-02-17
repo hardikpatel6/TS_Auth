@@ -7,25 +7,38 @@ const VideoCard = ({ video }) => {
   return (
 
     <div
-      onClick={() =>
-        navigate(`/videos/${video._id}`)
-      }
-      style={{
-        cursor: "pointer",
-        width: "300px"
-      }}
+      onClick={() => navigate(`/videos/${video._id}`)}
+      className="mt-5 ml-7 cursor-pointer w-[300px] group"
     >
 
-      <img
-        src={video.thumbnail}
-        width="300"
-      />
+      {/* Thumbnail */}
+      <div className="w-full h-[170px] overflow-hidden rounded-xl">
 
-      <h4>{video.title}</h4>
+        <img
+          src={video.thumbnail}
+          alt={video.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
 
-      <p>{video.channelName}</p>
+      </div>
 
-      <p>{video.views} views</p>
+
+      {/* Video info */}
+      <div className="mt-3">
+
+        <h4 className="font-semibold text-sm line-clamp-2">
+          {video.title}
+        </h4>
+
+        <p className="text-gray-600 text-sm mt-1">
+          {video.channelName}
+        </p>
+
+        <p className="text-gray-500 text-xs">
+          {video.views} views
+        </p>
+
+      </div>
 
     </div>
 
