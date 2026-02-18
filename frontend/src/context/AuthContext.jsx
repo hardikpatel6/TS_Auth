@@ -10,12 +10,12 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const initAuth = async () => {
-    const accessToken = localStorage.getItem("accessToken");
+      const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
         setLoading(false);
         return;
       }
-      
+
       setToken(accessToken);
       try {
         // Try getting profile with existing access token
@@ -47,8 +47,18 @@ export const AuthProvider = ({ children }) => {
     initAuth();
   }, []);
 
+  const login = (userData) => {
+    setUser(userData);
+    localStorage.setItem("accessToken", userData.token);
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("accessToken");
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser, token, setToken, loading }}>
+    <AuthContext.Provider value={{ user, setUser, token, setToken, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
