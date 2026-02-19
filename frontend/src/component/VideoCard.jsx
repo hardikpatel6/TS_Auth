@@ -1,16 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
 const VideoCard = ({ video }) => {
-
   const navigate = useNavigate();
-
   return (
     <div
       onClick={() => navigate(`/videos/${video._id}`)}
       className="mt-5 ml-7 cursor-pointer w-[300] group"
     >
-
-      {/* Thumbnail */}
       <div className="w-full h-[170] overflow-hidden rounded-xl">
         <img
           src={video.thumbnail}
@@ -18,7 +14,6 @@ const VideoCard = ({ video }) => {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
       </div>
-      {/* Video info */}
       <div className="mt-3">
         <h4 className="font-semibold text-sm line-clamp-2">
           {video.title}

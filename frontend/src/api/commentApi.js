@@ -11,3 +11,9 @@ export const updateCommentApi = (commentId, commentText) =>
 
 export const deleteCommentApi = (commentId) =>
   API.delete(`/comments/comment/${commentId}`);
+
+export const likeCommentApi = (commentId) =>
+  API.post(`/comments/like/${commentId}`);
+
+export const dislikeCommentApi = (commentId) =>
+  API.post(`/comments/dislike/${commentId}`);

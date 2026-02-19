@@ -42,7 +42,6 @@ const VideoPlayer = () => {
         try {
             const res = await likeVideoApi(video._id);
             const newLikes = res.data.likes;
-            console.log("New likes count:", newLikes);
             setLikeCount(newLikes);
             // toggle state
             setIsLiked(prev => !prev);
@@ -73,7 +72,6 @@ const VideoPlayer = () => {
         try {
             const res = await subscribeVideoApi(video._id);
             const data = res.data;
-            console.log("Subscribe response:", data);
             setIsSubscribed(true);
             setSubscriberCount(data.subscribers);
         } catch (error) {
@@ -83,7 +81,6 @@ const VideoPlayer = () => {
     const handleUnsubscribe = async () => {
         try {
             const res = await unsubscribeVideoApi(video._id);
-            console.log("Unsubscribe response:", res.data);
             setIsSubscribed(false);
             setSubscriberCount(res.data.subscribers);
         } catch (error) {

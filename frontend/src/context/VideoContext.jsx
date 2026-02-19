@@ -18,15 +18,12 @@ export const VideoProvider = ({ children }) => {
         setLoading(false);
       }
     };
-
     fetchVideos();
   }, []);
-
   return (
     <VideoContext.Provider value={{ videos, loading }}>
       {children}
     </VideoContext.Provider>
   );
 };
-
 export const useVideos = () => useContext(VideoContext);

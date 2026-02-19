@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
         return;
       }
-
       setToken(accessToken);
       try {
         // Try getting profile with existing access token
@@ -25,11 +24,9 @@ export const AuthProvider = ({ children }) => {
         try {
           // Access token expired → refresh it
           const refreshRes = await refreshTokenApi();
-
           const newAccessToken = refreshRes.data.accessToken;
           localStorage.setItem("accessToken", newAccessToken);
           setToken(newAccessToken);
-
           // Retry profile request
           const profileRes = await getProfileApi();
           setUser(profileRes.data.user);
@@ -43,7 +40,6 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     };
-
     initAuth();
   }, []);
 
