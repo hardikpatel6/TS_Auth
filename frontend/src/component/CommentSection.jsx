@@ -3,7 +3,9 @@ import {
     getCommentsApi,
     addCommentApi,
     updateCommentApi,
-    deleteCommentApi
+    deleteCommentApi,
+    likeCommentApi,
+    dislikeCommentApi
 } from "../api/commentApi";
 
 import { useAuth } from "../context/AuthContext";
@@ -31,60 +33,110 @@ const CommentSection = ({ videoId }) => {
 
     const handleAddComment = useCallback(
         async () => {
-        if (!newComment.trim()) return;
-        try {
-            const res = await addCommentApi(videoId, newComment);
-            const newCommentObj = {
-                ...res.data.comment,
-                user_id: {
-                    _id: user.id,
-                    name: user.name
-                }
-            };
-            setComments(prev => [...prev, newCommentObj]);
-            setNewComment("");
-        } catch (error) {
-            console.error(error);
-        }
-    }, [newComment, videoId, user] );
-    const handleEditClick = useCallback (
+            if (!newComment.trim()) return;
+            try {
+                const res = await addCommentApi(videoId, newComment);
+                const newCommentObj = {
+                    ...res.data.comment,
+                    user_id: {
+                        _id: user.id,
+                        name: user.name
+                    }
+                };
+                setComments(prev => [...prev, newCommentObj]);
+                setNewComment("");
+            } catch (error) {
+                console.error(error);
+            }
+        }, [newComment, videoId, user]);
+    const handleEditClick = useCallback(
         (comment) => {
-        setEditingId(comment._id);
-        setEditText(comment.commentText);
-    }, []);
-    const handleUpdateComment = useCallback (
+            setEditingId(comment._id);
+            setEditText(comment.commentText);
+        }, []);
+    const handleUpdateComment = useCallback(
         async (commentId) => {
-        if (!editText.trim()) return;
+            if (!editText.trim()) return;
+            try {
+                const res = await updateCommentApi(commentId, editText);
+                setComments(prev =>
+                    prev.map(comment =>
+                        comment._id === commentId
+                            ? {
+                                ...comment,
+                                commentText: editText
+                            }
+                            : comment
+                    )
+                );
+                setEditingId(null);
+                setEditText("");
+            } catch (error) {
+                console.error(error);
+            }
+        }, [editText]);
+
+    const handleDelete = useCallback(
+        async (commentId) => {
+            try {
+                await deleteCommentApi(commentId);
+                setComments(prev =>
+                    prev.filter(comment => comment._id !== commentId)
+                );
+            } catch (error) {
+                console.error(error);
+            }
+        }, []);
+
+    const handleLikeComment = useCallback(async (commentId) => {
         try {
-            const res = await updateCommentApi(commentId, editText);
+            const res = await likeCommentApi(commentId);
+            const { likesCount, isLiked } = res.data;
             setComments(prev =>
                 prev.map(comment =>
                     comment._id === commentId
                         ? {
                             ...comment,
-                            commentText: editText
+                            likesCount,
+                            isLiked,
+                            // remove dislike if switching
+                            isDisliked: isLiked ? false : comment.isDisliked,
+                            dislikesCount: isLiked && comment.isDisliked
+                                ? Math.max((comment.dislikesCount || 1) - 1, 0)
+                                : comment.dislikesCount
                         }
                         : comment
                 )
             );
-            setEditingId(null);
-            setEditText("");
         } catch (error) {
             console.error(error);
         }
-    }, [editText] );
+    }, []);
 
-    const handleDelete = useCallback (
-        async (commentId) => {
+    const handleDislikeComment = useCallback(async (commentId) => {
         try {
-            await deleteCommentApi(commentId);
+            const res = await dislikeCommentApi(commentId);
+            const { dislikesCount, isDisliked } = res.data;
             setComments(prev =>
-                prev.filter(comment => comment._id !== commentId)
+                prev.map(comment =>
+                    comment._id === commentId
+                        ? {
+                            ...comment,
+                            dislikesCount,
+                            isDisliked,
+                            // remove like if switching
+                            isLiked: isDisliked ? false : comment.isLiked,
+                            likesCount: isDisliked && comment.isLiked
+                                ? Math.max((comment.likesCount || 1) - 1, 0)
+                                : comment.likesCount
+                        }
+                        : comment
+                )
             );
         } catch (error) {
             console.error(error);
         }
-    } , []);
+    }, []);
 
     return (
         <div>
@@ -99,7 +151,7 @@ const CommentSection = ({ videoId }) => {
                             value={newComment}
                             onChange={e => setNewComment(e.target.value)}
                             placeholder="Add a comment..."
-                        /> 
+                        />
                         <button className="p-3 ml-3 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={handleAddComment}>Submit</button>
                     </div>
                 ) : (
@@ -135,7 +187,22 @@ const CommentSection = ({ videoId }) => {
                             </>
                         ) : (
                             <>
-                                <p>{comment.commentText}</p>
+                                <p>{comment.commentText} 
+                                    <button
+                                        className={`ml-4 ${comment.isLiked ? "text-blue-600" : "text-gray-600"
+                                            }`}
+                                        onClick={() => handleLikeComment(comment._id)}
+                                    >
+                                        👍 {comment.likesCount || 0}
+                                    </button>
+                                    <button
+                                        className={`ml-2 ${comment.isDisliked ? "text-red-600" : "text-gray-600"
+                                            }`}
+                                        onClick={() => handleDislikeComment(comment._id)}
+                                    >
+                                        👎 {comment.dislikesCount || 0}
+                                    </button>
+                                </p>
                                 <p className="text-sm text-gray-600">
                                     By: {comment.user_id?.name}
                                 </p>
