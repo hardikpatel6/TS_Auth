@@ -94,20 +94,19 @@ const CommentSection = ({ videoId }) => {
             {
                 user ? (
                     <div>
-                        <input className="border border-gray-300 rounded p-2 w-full"
+                        <input className="border border-gray-300 rounded p-2 w-[70%]"
                             type="text"
                             value={newComment}
                             onChange={e => setNewComment(e.target.value)}
                             placeholder="Add a comment..."
-                        />
-                        <br>
-                        </br>
-                        <button className="p-3 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={handleAddComment}>Submit</button>
+                        /> 
+                        <button className="p-3 ml-3 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={handleAddComment}>Submit</button>
                     </div>
                 ) : (
                     <p>Please log in to comment.</p>
                 )
             }
+            <br></br>
             <ul>
                 {comments.map(comment => (
                     <li key={comment._id} className="mb-4 border-b pb-2">

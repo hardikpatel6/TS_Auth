@@ -9,24 +9,15 @@ import {
 } from "../api/videoApi";
 import CommentSection from "../component/CommentSection";
 const VideoPlayer = () => {
-
     const { id } = useParams();
-
     const [video, setVideo] = useState(null);
     const [loading, setLoading] = useState(true);
-
     const [isLiked, setIsLiked] = useState(false);
     const [isDisliked, setIsDisliked] = useState(false);
     const [isSubscribed, setIsSubscribed] = useState(false);
-
     const [likeCount, setLikeCount] = useState(0);
     const [dislikeCount, setDislikeCount] = useState(0);
     const [subscriberCount, setSubscriberCount] = useState(0);
-
-    //////////////////////////////////////////////////////
-    // Fetch video
-    //////////////////////////////////////////////////////
-
     useEffect(() => {
         const fetchVideo = async () => {
             try {
@@ -47,11 +38,11 @@ const VideoPlayer = () => {
         };
         fetchVideo();
     }, [id]);
-
     const handleLike = async () => {
         try {
             const res = await likeVideoApi(video._id);
             const newLikes = res.data.likes;
+            console.log("New likes count:", newLikes);
             setLikeCount(newLikes);
             // toggle state
             setIsLiked(prev => !prev);
@@ -78,24 +69,23 @@ const VideoPlayer = () => {
             console.error(error);
         }
     };
-
     const handleSubscribe = async () => {
         try {
             const res = await subscribeVideoApi(video._id);
             const data = res.data;
+            console.log("Subscribe response:", data);
             setIsSubscribed(true);
-            setSubscriberCount(data.subscribersCount);
+            setSubscriberCount(data.subscribers);
         } catch (error) {
             console.error(error);
         }
     };
-
     const handleUnsubscribe = async () => {
         try {
             const res = await unsubscribeVideoApi(video._id);
-            const data = res.data;
+            console.log("Unsubscribe response:", res.data);
             setIsSubscribed(false);
-            setSubscriberCount(data.subscribersCount);
+            setSubscriberCount(res.data.subscribers);
         } catch (error) {
             console.error(error);
         }
@@ -103,10 +93,8 @@ const VideoPlayer = () => {
 
     if (loading)
         return <div className="text-center mt-10">Loading...</div>;
-
     if (!video)
         return <div className="text-center mt-10">Video not found</div>;
-
     return (
         <>
             <div className="flex justify-center px-4 mt-6">
@@ -128,32 +116,25 @@ const VideoPlayer = () => {
                             className={`px-4 py-2 text-white rounded ${isLiked ? "bg-blue-700" : "bg-blue-500"
                                 }`}
                         >
-                            👍 {likeCount}
+                            👍 
                         </button>
+                        <p className="ml-2 mt-2 text-gray-600">{likeCount}</p>
                         <button
                             onClick={handleDislike}
                             className={`px-4 py-2 text-white rounded ${isDisliked ? "bg-red-700" : "bg-red-500"
                                 }`}
                         >
-                            👎 {dislikeCount}
+                            👎 
                         </button>
-                        {
-                            isSubscribed
-                                ?
-                                <button
-                                    onClick={handleUnsubscribe}
-                                    className="px-4 py-2 bg-gray-500 text-white rounded"
-                                >
-                                    Unsubscribe ({subscriberCount})
-                                </button>
-                                :
-                                <button
-                                    onClick={handleSubscribe}
-                                    className="px-4 py-2 bg-green-600 text-white rounded"
-                                >
-                                    Subscribe ({subscriberCount})
-                                </button>
-                        }
+                        <p className="ml-2 mt-2 text-gray-600">{dislikeCount}</p>
+                        <button
+                            onClick={isSubscribed ? handleUnsubscribe : handleSubscribe}
+                            className={`px-4 py-2 text-white rounded ${isSubscribed ? "bg-gray-700" : "bg-gray-500"
+                                }`}
+                        >
+                            {isSubscribed ? "Subscribed" : "Subscribe"} 
+                        </button>
+                        <p className="ml-2 mt-2 text-gray-600">{subscriberCount}</p>
                     </div>
                 </div>
             </div>

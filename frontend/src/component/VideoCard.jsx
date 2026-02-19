@@ -18,7 +18,6 @@ const VideoCard = ({ video }) => {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
       </div>
-
       {/* Video info */}
       <div className="mt-3">
         <h4 className="font-semibold text-sm line-clamp-2">
@@ -33,7 +32,6 @@ const VideoCard = ({ video }) => {
       </div>
     </div>
   );
-
 };
 
 export default VideoCard;
