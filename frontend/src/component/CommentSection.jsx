@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
     getCommentsApi,
     addCommentApi,
@@ -9,53 +9,73 @@ import {
 import { useAuth } from "../context/AuthContext";
 
 const CommentSection = ({ videoId }) => {
-
     const { user } = useAuth();
-    console.log("User in CommentSection:", user);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
-
     const [editingId, setEditingId] = useState(null);
     const [editText, setEditText] = useState("");
-    const [matchComment,setMatchComment] = useState([]);
-    const fetchComments = async () => {
-        try {
-            const res = await getCommentsApi(videoId);
-            console.log("Comments fetched:",res.data);
-            const myComments = res.data.filter((comment) => {
-                // console.log("Checking comment:", comment);
-                // console.log("Comment's user_id:", comment.user_id._id);
-                // console.log("Current user ID:", user.id);
-                // console.log("Match condition:",comment.user_id._id === user.id);
-                return user && comment.user_id && comment.user_id._id === user.id;
+
+    const fetchComments = useCallback(
+        async () => {
+            try {
+                const res = await getCommentsApi(videoId);
+                setComments(res.data);
+            } catch (error) {
+                console.error(error);
             }
-            );
-            console.log("My Comments:", myComments);
-            setMatchComment(myComments);
-            setComments(res.data);;
-        } catch (error) {
-            console.error(error);
-        }
-    };
+        }, [videoId]);
 
     useEffect(() => {
         fetchComments();
-        
     }, [videoId]);
 
-    const handleAddComment = async () => {
+    const handleAddComment = useCallback(
+        async () => {
         if (!newComment.trim()) return;
         try {
             const res = await addCommentApi(videoId, newComment);
-            console.log("Add comment response:", res.data);
-            setComments(prev => [res.data, ...prev]);
+            const newCommentObj = {
+                ...res.data.comment,
+                user_id: {
+                    _id: user.id,
+                    name: user.name
+                }
+            };
+            setComments(prev => [...prev, newCommentObj]);
             setNewComment("");
         } catch (error) {
             console.error(error);
         }
-    };
+    }, [newComment, videoId, user] );
+    const handleEditClick = useCallback (
+        (comment) => {
+        setEditingId(comment._id);
+        setEditText(comment.commentText);
+    }, []);
+    const handleUpdateComment = useCallback (
+        async (commentId) => {
+        if (!editText.trim()) return;
+        try {
+            const res = await updateCommentApi(commentId, editText);
+            setComments(prev =>
+                prev.map(comment =>
+                    comment._id === commentId
+                        ? {
+                            ...comment,
+                            commentText: editText
+                        }
+                        : comment
+                )
+            );
+            setEditingId(null);
+            setEditText("");
+        } catch (error) {
+            console.error(error);
+        }
+    }, [editText] );
 
-    const handleDelete = async (commentId) => {
+    const handleDelete = useCallback (
+        async (commentId) => {
         try {
             await deleteCommentApi(commentId);
             setComments(prev =>
@@ -64,66 +84,80 @@ const CommentSection = ({ videoId }) => {
         } catch (error) {
             console.error(error);
         }
-    };
+    } , []);
 
-    const handleEdit = async (commentId) => {
-        try {
-            const res = await updateCommentApi(commentId, editText);
-            setComments(prev =>
-                prev.map(comment =>
-                    comment._id === commentId
-                        ? res.data
-                        : comment
-                )
-            );
-            setEditingId(null);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    // console.log("MatchComment:",matchComment);
-    // console.log("comments",comments.user_id._id);
     return (
         <div>
-            <h3>Comments</h3>
-            {user && (
-                <div>
-                    <textarea
-                        value={newComment}
-                        onChange={e => setNewComment(e.target.value)}
-                        placeholder="Add a comment..."
-                    />
-                    <button onClick={handleAddComment}>Submit</button>
-                </div>
-            )}
-            <br>
-            </br>
+            <br></br>
+            <h1>Comments</h1>
+            <br></br>
+            {
+                user ? (
+                    <div>
+                        <input className="border border-gray-300 rounded p-2 w-full"
+                            type="text"
+                            value={newComment}
+                            onChange={e => setNewComment(e.target.value)}
+                            placeholder="Add a comment..."
+                        />
+                        <br>
+                        </br>
+                        <button className="p-3 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={handleAddComment}>Submit</button>
+                    </div>
+                ) : (
+                    <p>Please log in to comment.</p>
+                )
+            }
             <ul>
-                {
-                comments.map(comment => (
-                    <li key={comment._id}>
+                {comments.map(comment => (
+                    <li key={comment._id} className="mb-4 border-b pb-2">
                         {editingId === comment._id ? (
-                            <div>
-                                <textarea
+                            <>
+                                <input
+                                    className="border border-gray-300 rounded p-2 w-full"
                                     value={editText}
-                                    onChange={e => setEditText(e.target.value)}
+                                    onChange={(e) => setEditText(e.target.value)}
                                 />
-                                <button onClick={() => handleEdit(comment._id)}>Save</button>
-                                <button onClick={() => setEditingId(null)}>Cancel</button>
-                            </div>
+                                <button
+                                    className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2 mt-2"
+                                    onClick={() => handleUpdateComment(comment._id)}
+                                >
+                                    Save
+                                </button>
+                                <button
+                                    className="p-2 bg-gray-500 text-white rounded hover:bg-gray-600 mt-2"
+                                    onClick={() => {
+                                        setEditingId(null);
+                                        setEditText("");
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                            </>
                         ) : (
-                            <div>
+                            <>
                                 <p>{comment.commentText}</p>
-                                {user && user.id === comment.user_id.id && (
-                                    <div>
-                                        <button onClick={() => {
-                                            setEditingId(comment._id);
-                                            setEditText(comment.commentText);
-                                        }}>Edit</button>
-                                        <button onClick={() => handleDelete(comment._id)}>Delete</button>
-                                    </div>
+                                <p className="text-sm text-gray-600">
+                                    By: {comment.user_id?.name}
+                                </p>
+                                {/* Only show edit/delete for comment owner */}
+                                {comment.user_id?._id === user.id && (
+                                    <>
+                                        <button
+                                            className="p-2 bg-green-500 text-white rounded hover:bg-green-600 mr-2"
+                                            onClick={() => handleEditClick(comment)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                            onClick={() => handleDelete(comment._id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </>
                                 )}
-                            </div>
+                            </>
                         )}
                     </li>
                 ))}
