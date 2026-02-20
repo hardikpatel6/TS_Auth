@@ -2,9 +2,11 @@ import { useVideos } from "../context/VideoContext";
 import VideoCard from "./VideoCard";
 
 const VideoGrid = () => {
-  const { videos, loading } = useVideos();
+  const { videos, loading , notFound } = useVideos();
   if (loading)
     return <p>Loading videos...</p>;
+  if (notFound)
+    return <p>No videos found.</p>;
   return (
     <div
       style={{
