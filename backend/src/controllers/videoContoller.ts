@@ -103,7 +103,7 @@ export const uploadVideoFile = async (req: Request, res: Response): Promise<Resp
 
 export const showAllVideos = async (req: Request, res: Response) => {
     try {
-        const videos = await Video.find().populate("uploadedBy", "username email").sort({ createdAt: -1 }).select("title description thumbnail views likes dislikes uploadedBy");
+        const videos = await Video.find().populate("uploadedBy", "username email").sort({ createdAt: -1 }).select("title description thumbnail views likes dislikes uploadedBy createdAt");
         return res.status(200).json(videos);
     }
     catch (err) {

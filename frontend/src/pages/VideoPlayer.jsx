@@ -107,6 +107,9 @@ const VideoPlayer = () => {
                     <p className="text-gray-600 mt-2">
                         {video.description}
                     </p>
+                    <p className="text-gray-500 text-sm mt-1">
+                        {video.uploadedBy.email}
+                    </p>
                     <div className="flex gap-4 mt-4">
                         <button
                             onClick={handleLike}

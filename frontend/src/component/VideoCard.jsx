@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { timeAgo } from "../utils/timeAgo";
 
 const VideoCard = ({ video }) => {
   const navigate = useNavigate();
@@ -21,8 +22,8 @@ const VideoCard = ({ video }) => {
         <p className="text-gray-600 text-sm mt-1">
           {video.description}
         </p>
-        <p className="text-gray-500 text-xs">
-          {video.views} views
+        <p className="text-gray-500 text-xs mt-1">
+         • {timeAgo(video.createdAt)}
         </p>
       </div>
     </div>

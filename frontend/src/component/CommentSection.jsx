@@ -139,14 +139,14 @@ const CommentSection = ({ videoId }) => {
     }, []);
 
     return (
-        <div>
+        <div className="mt-8 ml-[21%]">
             <br></br>
             <h1>Comments</h1>
             <br></br>
             {
                 user ? (
                     <div>
-                        <input className="border border-gray-300 rounded p-2 w-[70%]"
+                        <input className="border border-gray-300 rounded p-2 w-[50%]"
                             type="text"
                             value={newComment}
                             onChange={e => setNewComment(e.target.value)}
