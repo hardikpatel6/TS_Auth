@@ -1,5 +1,5 @@
 import express from "express";
-import {uploadVideoFile,showAllVideos,searchVideos,getVideoById,editVideo,likeVideo,dislikeVideo,deleteVideo,subscribeVideo,unsubscribeVideo} from "../controllers/videoContoller";
+import {uploadVideoFile,showAllVideos,searchVideos,getVideoById,editVideo,likeVideo,dislikeVideo,deleteVideo,subscribeVideo,unsubscribeVideo, incrementViewCount} from "../controllers/videoContoller";
 import {auth} from "../middlewares/authMiddleware";
 
 const router = express.Router();
@@ -11,6 +11,7 @@ router.get("/:id",auth,getVideoById);
 router.put("/:id",auth,editVideo);
 router.post("/like/:id",auth,likeVideo);
 router.post("/dislike/:id",auth,dislikeVideo);
+router.post("/addview/:videoId",auth,incrementViewCount);
 router.delete("/:id",auth,deleteVideo);
 router.post("/subscribe/:id",auth,subscribeVideo);
 router.post("/unsubscribe/:id",auth,unsubscribeVideo);
