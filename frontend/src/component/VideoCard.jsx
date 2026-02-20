@@ -23,7 +23,7 @@ const VideoCard = ({ video }) => {
           {video.description}
         </p>
         <p className="text-gray-500 text-xs mt-1">
-         • {timeAgo(video.createdAt)}
+         {video.viewedBy.length || 0 } • {timeAgo(video.createdAt)}
         </p>
       </div>
     </div>

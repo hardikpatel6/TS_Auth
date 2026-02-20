@@ -5,7 +5,8 @@ import {
     likeVideoApi,
     dislikeVideoApi,
     subscribeVideoApi,
-    unsubscribeVideoApi
+    unsubscribeVideoApi,
+    incrementViewCountApi
 } from "../api/videoApi";
 import CommentSection from "../component/CommentSection";
 const VideoPlayer = () => {
@@ -23,6 +24,8 @@ const VideoPlayer = () => {
             try {
                 const res = await getVideoByIdApi(id);
                 const data = res.data;
+                const like = await incrementViewCountApi(id);
+                console.log(like.data.views);
                 setVideo(data);
                 setLikeCount(data.likesCount);
                 setDislikeCount(data.dislikesCount);
@@ -116,7 +119,7 @@ const VideoPlayer = () => {
                             className={`px-4 py-2 text-white rounded ${isLiked ? "bg-blue-700" : "bg-blue-500"
                                 }`}
                         >
-                            👍 
+                            👍
                         </button>
                         <p className="ml-2 mt-2 text-gray-600">{likeCount}</p>
                         <button
@@ -124,7 +127,7 @@ const VideoPlayer = () => {
                             className={`px-4 py-2 text-white rounded ${isDisliked ? "bg-red-700" : "bg-red-500"
                                 }`}
                         >
-                            👎 
+                            👎
                         </button>
                         <p className="ml-2 mt-2 text-gray-600">{dislikeCount}</p>
                         <button
@@ -132,7 +135,7 @@ const VideoPlayer = () => {
                             className={`px-4 py-2 text-white rounded ${isSubscribed ? "bg-gray-700" : "bg-gray-500"
                                 }`}
                         >
-                            {isSubscribed ? "Subscribed" : "Subscribe"} 
+                            {isSubscribed ? "Subscribed" : "Subscribe"}
                         </button>
                         <p className="ml-2 mt-2 text-gray-600">{subscriberCount}</p>
                     </div>

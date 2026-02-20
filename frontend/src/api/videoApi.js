@@ -27,3 +27,6 @@ export const subscribeVideoApi = (videoId) =>
 
 export const unsubscribeVideoApi = (videoId) =>
   API.post(`/videos/unsubscribe/${videoId}`);
+
+export const incrementViewCountApi = (videoId) =>
+  API.post(`/videos/addview/${videoId}`);

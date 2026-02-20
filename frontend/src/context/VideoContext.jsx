@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getVideosApi, uploadVideoApi, searchVideosApi } from "../api/videoApi";
+import { getVideosApi, uploadVideoApi, searchVideosApi} from "../api/videoApi";
 import { useLocation } from "react-router-dom";
 const VideoContext = createContext();
 
