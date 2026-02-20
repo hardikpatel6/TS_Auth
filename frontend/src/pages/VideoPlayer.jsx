@@ -1,17 +1,23 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate } from "react-router-dom";
 import {
     getVideoByIdApi,
     likeVideoApi,
     dislikeVideoApi,
     subscribeVideoApi,
     unsubscribeVideoApi,
-    incrementViewCountApi
+    incrementViewCountApi,
+    deleteVideoApi
 } from "../api/videoApi";
+import { useAuth } from "../context/AuthContext";
 import CommentSection from "../component/CommentSection";
 const VideoPlayer = () => {
+    const navigate = useNavigate();
     const { id } = useParams();
+    const { user } = useAuth();
+    console.log("user", user?.id);
     const [video, setVideo] = useState(null);
+    console.log("video", video?.uploadedBy?._id);
     const [loading, setLoading] = useState(true);
     const [isLiked, setIsLiked] = useState(false);
     const [isDisliked, setIsDisliked] = useState(false);
@@ -25,7 +31,6 @@ const VideoPlayer = () => {
                 const res = await getVideoByIdApi(id);
                 const data = res.data;
                 const like = await incrementViewCountApi(id);
-                console.log(like.data.views);
                 setVideo(data);
                 setLikeCount(data.likesCount);
                 setDislikeCount(data.dislikesCount);
@@ -90,7 +95,23 @@ const VideoPlayer = () => {
             console.error(error);
         }
     };
-
+    const handleEdit = () => {
+        // navigate to edit page
+        console.log("Navigate to edit page for video id:", video._id);
+        navigate(`/videos/edit/${video._id}`);
+    };
+    const handleDelete = async () => {
+        if (window.confirm("Are you sure you want to delete this video?")) {
+            try {
+                await deleteVideoApi(video._id);
+                alert("Video deleted successfully");
+                navigate("/");
+            } catch (error) {
+                console.error(error);
+                alert("Failed to delete video");
+            }
+        }
+    };
     if (loading)
         return <div className="text-center mt-10">Loading...</div>;
     if (!video)
@@ -104,6 +125,18 @@ const VideoPlayer = () => {
                             <source src={video.url} type="video/mp4" />
                         </video>
                     </div>
+                    {
+                        video.uploadedBy._id === user?.id && (
+                            <button className={`mt-3 px-4 py-2 text-white rounded ${isLiked ? "bg-blue-700" : "bg-blue-500"
+                                }`} onClick={handleEdit}>Edit Video </button>
+                        )
+                    }
+                    {
+                        video.uploadedBy._id === user?.id && (
+                            <button className={`ml-2 mt-3 px-4 py-2 text-white rounded ${isLiked ? "bg-red-700" : "bg-red-500"
+                                }`} onClick={handleDelete}>Delete Video </button>
+                        )
+                    }
                     <h1 className="text-xl font-semibold mt-4">
                         {video.title}
                     </h1>

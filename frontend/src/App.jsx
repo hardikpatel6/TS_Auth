@@ -6,7 +6,7 @@ import VideoPlayer from "./pages/VideoPlayer";
 import ProtectedRoute from "./context/ProtectedRoute";
 import Navbar from "./component/Navbar";
 import Upload from "./pages/Upload";
-
+import EditPage from "./pages/EditPage";
 function App() {
   return (
     <>
@@ -17,6 +17,7 @@ function App() {
         <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path="/videos/:id" element={<VideoPlayer />} />
+        <Route path="/videos/edit/:id" element={<ProtectedRoute><EditPage /></ProtectedRoute>} /> {/* Add this route for EditPage */}
       </Routes>
     </>
       

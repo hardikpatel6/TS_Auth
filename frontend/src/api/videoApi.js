@@ -30,3 +30,13 @@ export const unsubscribeVideoApi = (videoId) =>
 
 export const incrementViewCountApi = (videoId) =>
   API.post(`/videos/addview/${videoId}`);
+
+export const editVideoApi = (videoId, data) =>
+  API.put(`/videos/edit/${videoId}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  });
+
+export const deleteVideoApi = (videoId) =>
+  API.delete(`/videos/delete/${videoId}`);

@@ -5,7 +5,6 @@ import { useState } from "react";
 const Navbar = () => {
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
-
   const [search, setSearch] = useState("");
 
   const handleLogout = async () => {
